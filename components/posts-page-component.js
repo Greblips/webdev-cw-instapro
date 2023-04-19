@@ -3,13 +3,7 @@ import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
 
 export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
 
-  /**
-   * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-   * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-   */
   const appHtml = `<div class="page-container">
   <div class="header-container"></div>
   <ul class="posts">` +
@@ -26,8 +20,11 @@ export function renderPostsPageComponent({ appEl }) {
         <img class="post-image" src=${post.imageUrl}>
       </div>
       <div class="post-likes">
-        <button data-post-id=${index} class="like-button">
-          <img src="./assets/images/${post.isLiked ? 'like-active.svg' : 'like-not-active.svg'}">
+        <button data-post-id=${post.id} class="like-button">
+          <img src="./assets/images/${post.isLiked ?
+            'like-active.svg' 
+            :
+            'like-not-active.svg'}">
         </button>
         <p class="post-likes-text">
             Нравится: <strong>
@@ -60,6 +57,16 @@ for (let userEl of document.querySelectorAll(".post-header")) {
     goToPage(USER_POSTS_PAGE, {
       userId: userEl.dataset.userId,
     });
+  });
+}
+
+for (let likeEl of document.querySelectorAll(".like-button")) {
+  const postId = likeEl.dataset.postId;
+
+ 
+  likeEl.addEventListener("click", () => {
+    console.log(postId)
+
   });
 }
 }
