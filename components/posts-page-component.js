@@ -1,6 +1,11 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, getToken } from "../index.js";
+import { user } from "../index.js";
+import { addLike } from "../api.js";
+import { delLike } from "../api.js";
+
+
 
 export function renderPostsPageComponent({ appEl }) {
 
@@ -21,16 +26,13 @@ export function renderPostsPageComponent({ appEl }) {
       </div>
       <div class="post-likes">
         <button data-post-id=${post.id} class="like-button">
-          <img src="./assets/images/${post.isLiked ?
-            'like-active.svg' 
-            :
-            'like-not-active.svg'}">
+          <img src="./assets/images/${post.isLiked ? 'like-active.svg' : 'like-not-active.svg'}">
         </button>
         <p class="post-likes-text">
             Нравится: <strong>
-            ${post.likes.length > 1 ? post.likes[0].name + ` и ещё ${post.likes.length - 1} пользователям` 
+             ${post.likes.length > 1 ? post.likes[0].name + ` и ещё ${post.likes.length - 1}`
             : post.likes.length ? post.likes[0].name
-            : "0"}</strong>
+              : "0"}</strong>
         </p>
       </div>
       <p class="post-text">
@@ -60,13 +62,49 @@ for (let userEl of document.querySelectorAll(".post-header")) {
   });
 }
 
-for (let likeEl of document.querySelectorAll(".like-button")) {
-  const postId = likeEl.dataset.postId;
 
- 
+
+// Лайки
+document.querySelectorAll(".like-button").forEach((likeEl) => {
   likeEl.addEventListener("click", () => {
-    console.log(postId)
-
+    handleLikeClick(likeEl)
   });
+});
+
+// логика лайков
+function handleLikeClick (likeEl){
+  const postId = likeEl.dataset.postId;
+  const index = likeEl.closest(".post").dataset.index;
+  const post = posts[index];
+    if (!user) {
+    alert('лайки ставить могут только авторизованные пользователи')
+      return;
+    }
+  const isLiked = posts[index].isLiked;
+
+
+  if (!isLiked){
+    addLike({
+      token : getToken(),
+      postId : postId,
+    }).then(() => {
+      post.isLiked = true;
+      post.likes.push({
+        id: user.id,
+        name: user.name,
+      });
+      renderPostsPageComponent({ appEl });
+    });
+  } else if (isLiked) {           
+    delLike({
+      token: getToken(),
+      postId: postId,
+    }).then(() => {
+      post.isLiked = false;
+      post.likes.pop();
+      renderPostsPageComponent({ appEl });
+    });
+  }
 }
+
 }
