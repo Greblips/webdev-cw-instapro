@@ -1,5 +1,5 @@
 .page-container {
-  padding: 0 20px;
+
 }
 
 .page-header {
@@ -130,7 +130,21 @@
   font-size: 28px;
   line-height: 35px;
 }
+.del__comment{
+  font-size: 1rem;
+  margin-top: 1rem;
+  padding: 2px;
+  border-radius: 10px;
+  color: #070707;
+  background-color: rgba(255, 255, 254, 0.881);
+  padding: 8px;
+  cursor: pointer;
+}
+.del__comment:hover{
 
+transition: 2s;
+color: red;
+}
 .loading-page {
   display: flex;
   justify-content: center;
@@ -176,7 +190,7 @@
   text-align: center;
 }
 
-.file-upload-image-conrainer {
+.file-upload-image-conainer {
   display: flex;
   align-items: center;
 }
@@ -198,4 +212,67 @@
 }
 
 
+@media (min-width: 768px){
+  .page-container{
+   max-width: 100vw;
+   margin: 0 auto;
+   padding: 0 20px;
+   box-sizing: border-box;
 
+  }
+.post-image{
+
+}
+
+
+  .posts{
+    font-size: 1.5rem;
+  }
+
+
+  .logo {
+    font-size: 2rem;
+    
+  }
+  .logo:hover {
+    font-size: 2.5rem;
+    transition: 3s;
+    color: red;
+  }
+.post-image-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 600px;
+  min-height:  600px;
+}
+.post-image {
+  min-width:  600px;
+  min-height:  600px;
+}
+  .post-likes {
+    margin-top: 1rem;
+  }
+  .post-text{
+    font-size: 1.5rem;
+  }
+  .post-date{
+    margin-top: 12px;
+    font-size: 1rem;
+  }
+ 
+  .header-container {
+    margin-bottom: 32px;
+  }
+  .header-button {
+    font-size: 1rem;
+    transition: 3s;
+  }
+  .header-button:hover {
+    font-size: 1.5rem;
+    transition: 3s;
+  }
+  .form-inputs{
+    gap: 16px;
+  }
+}

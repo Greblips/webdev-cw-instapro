@@ -65,7 +65,7 @@ for (let userEl of document.querySelectorAll(".post-header")) {
   });
 }
 
-console.log(user.login)
+
 
 
 document.querySelectorAll(".del__comment").forEach((delEl) => {
