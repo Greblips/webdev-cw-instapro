@@ -1,11 +1,11 @@
-import { USER_POSTS_PAGE } from "../routes.js";
+import { USER_POSTS_PAGE,} from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken } from "../index.js";
 import { user } from "../index.js";
 import { addLike } from "../api.js";
 import { delLike } from "../api.js";
-
-
+import { deletePost } from "../api.js";
+import { POSTS_PAGE } from "../routes.js";
 
 export function renderPostsPageComponent({ appEl }) {
 
@@ -13,14 +13,16 @@ export function renderPostsPageComponent({ appEl }) {
   <div class="header-container"></div>
   <ul class="posts">` +
 
-  posts.map((post, index) => {
+  posts.map((post, id) => {
     return  `
-    <li class="post" data-index = "${index}">
-    
+    <li class="post" data-index = "${id}">
+
       <div class="post-header" data-user-id=${post.user.id}
-        <img src=${post.user.imageUrl}class="post-header__user-image">
-        <p class="post-header__user-name">${post.user.name}</p>
+      <div class="post-header-user"><img src=${post.user.imageUrl} class="post-header__user-image">
+      <p class="post-header__user-name">${post.user.name}</p>
       </div>
+      
+
       <div class="post-image-container">
         <img class="post-image" src=${post.imageUrl}>
       </div>
@@ -39,6 +41,7 @@ export function renderPostsPageComponent({ appEl }) {
         <span class="user-name">${post.user.name}</span>
         ${post.description}
       </p>
+      <button class="del__comment" data-post-id="${post.id}">Удалить пост</button>
       <p class="post-date">${post.createdAt}</p>
       
     </li>
@@ -62,6 +65,30 @@ for (let userEl of document.querySelectorAll(".post-header")) {
   });
 }
 
+console.log(user.login)
+
+
+document.querySelectorAll(".del__comment").forEach((delEl) => {
+  delEl.addEventListener("click", () => {
+    if (!user) {
+      alert('удалать посты могут только авторизованные пользователи')
+        return;
+      }
+    const postId = delEl.dataset.postId
+    console.log(postId)
+   
+    deletePost({
+      token : getToken(),
+      id : delEl.dataset.postId,
+    }).then(() => {
+      goToPage(POSTS_PAGE);
+  })
+    
+  });
+});
+
+
+
 
 
 // Лайки
@@ -74,7 +101,9 @@ document.querySelectorAll(".like-button").forEach((likeEl) => {
 // логика лайков
 function handleLikeClick (likeEl){
   const postId = likeEl.dataset.postId;
+
   const index = likeEl.closest(".post").dataset.index;
+ 
   const post = posts[index];
     if (!user) {
     alert('лайки ставить могут только авторизованные пользователи')

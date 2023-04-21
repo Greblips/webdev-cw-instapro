@@ -3,7 +3,7 @@ import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 import { goToPage } from "../index.js";
 import { POSTS_PAGE } from "../routes.js";
-
+import { safeInputText } from "../helpers.js";
 
 
 export function renderAddPostPageComponent({ appEl, token }) {
@@ -45,10 +45,19 @@ export function renderAddPostPageComponent({ appEl, token }) {
     });
 
     document.getElementById("add-button").addEventListener("click", async () => {
+      if (!document.querySelector('.textarea').value) {
+        alert("Накинь пару мыслей о фото!");
+        return;
+      }
+      if (!userImageUrl) {
+        alert("А где фотка?!");
+        return;
+      }
     
     
       onAddPostClick({
-        description: document.querySelector('.textarea').value,
+        
+        description: safeInputText(document.querySelector('.textarea').value),
         imageUrl:  userImageUrl,
         token: token,
       })
