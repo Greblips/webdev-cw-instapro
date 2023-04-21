@@ -4,7 +4,7 @@ import { renderUploadImageComponent } from "./upload-image-component.js";
 import { goToPage } from "../index.js";
 import { POSTS_PAGE } from "../routes.js";
 import { safeInputText } from "../helpers.js";
-
+import Swal from 'sweetalert2'
 
 export function renderAddPostPageComponent({ appEl, token }) {
   let userImageUrl =''
@@ -46,11 +46,11 @@ export function renderAddPostPageComponent({ appEl, token }) {
 
     document.getElementById("add-button").addEventListener("click", async () => {
       if (!document.querySelector('.textarea').value) {
-        alert("Накинь пару мыслей о фото!");
+        Swal.fire('Добавьте описание фото ')
         return;
       }
       if (!userImageUrl) {
-        alert("А где фотка?!");
+        Swal.fire('А где фото? ')
         return;
       }
     

@@ -6,6 +6,9 @@ import { addLike } from "../api.js";
 import { delLike } from "../api.js";
 import { deletePost } from "../api.js";
 import { POSTS_PAGE } from "../routes.js";
+import { formatDistanceToNow } from "date-fns";
+import { ru } from 'date-fns/locale/';
+import Swal from 'sweetalert2'
 
 export function renderPostsPageComponent({ appEl }) {
 
@@ -42,7 +45,7 @@ export function renderPostsPageComponent({ appEl }) {
         ${post.description}
       </p>
       <button class="del__comment" data-post-id="${post.id}">Удалить пост</button>
-      <p class="post-date">${post.createdAt}</p>
+      <p class="post-date">${formatDistanceToNow(new Date(post.createdAt), { locale: ru, addSuffix: true })}</p>
       
     </li>
   `
@@ -71,7 +74,7 @@ for (let userEl of document.querySelectorAll(".post-header")) {
 document.querySelectorAll(".del__comment").forEach((delEl) => {
   delEl.addEventListener("click", () => {
     if (!user) {
-      alert('удалать посты могут только авторизованные пользователи')
+      Swal.fire('удалать посты могут только авторизованные пользователи')
         return;
       }
     const postId = delEl.dataset.postId
@@ -106,7 +109,7 @@ function handleLikeClick (likeEl){
  
   const post = posts[index];
     if (!user) {
-    alert('лайки ставить могут только авторизованные пользователи')
+      Swal.fire('лайки ставить могут только авторизованные пользователи')
       return;
     }
   const isLiked = posts[index].isLiked;
